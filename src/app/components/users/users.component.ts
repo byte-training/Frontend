@@ -26,7 +26,7 @@ export interface UserData {
 var usuario: User;
 var ids = 0;
 var isLoadingResults = false;
-var datos = [];
+var datos : User[];
 
 @Component({
   selector: 'app-users',
