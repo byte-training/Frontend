@@ -1,0 +1,67 @@
+<div class="container animated fadeIn" style="height: 100%">
+    <br>
+    <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-flat-button color="primary" (click)="createDialog()">Agregar <mat-icon>add</mat-icon></button>
+    </div><br>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese nombre">
+    </mat-form-field>
+
+    <div class="example-loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div class="mat-elevation-z8 animated fadeInRight">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'principal.headerTable1' | translate }} </th>
+                <td mat-cell *matCellDef="let row"> {{row.identification}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'principal.headerTable2' | translate }} </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+            </ng-container>
+
+            <!-- Lastname Column -->
+            <ng-container matColumnDef="lastname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'principal.headerTable3' | translate }} </th>
+                <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
+            </ng-container>
+
+            <!-- Birthdate Column -->
+            <ng-container matColumnDef="birthdate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'principal.headerTable4' | translate }} </th>
+                <td mat-cell *matCellDef="let row"> {{row.birthdate}} </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef style="width: 30px;"> {{ 'principal.headerTable5' | translate }} </th>
+                <td mat-cell *matCellDef="let element">
+                    <div fxLayout="row">
+                        <button mat-icon-button aria-label="Ver elemento" (click)="readDialog(element)">
+                            <mat-icon color="primary">visibility</mat-icon>
+                        </button>
+                        <button mat-icon-button aria-label="Editar elemento" (click)="updateDialog(element)">
+                            <mat-icon color="primary">create</mat-icon>
+                        </button>
+                        <button mat-icon-button aria-label="Eliminar elemento" (click)="deleteDialog(element)">
+                            <mat-icon color="warn">delete</mat-icon>
+                        </button>
+                    </div>
+                </td>td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div><br><br>
+</div>

@@ -1,0 +1,35 @@
+<div fxLayout="row">
+    <div fxFlex="50">
+        <h1 style="color: #2E2E2E;" mat-dialog-title>Datos del Usuario</h1>
+    </div>
+    <div fxFlex="50" fxLayoutAlign="end start">
+        <button mat-button mat-icon-button aria-label="Clear"
+            style="color: #A4A4A4; margin-top: -15px;margin-right: -15px;" (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+<div mat-dialog-content style="border-top-width: 1.5px;border-top-color: #E6E6E6; border-top-style: solid;">
+    <br>
+    <mat-form-field style="width: 49%;" appearance="outline">
+        <mat-label>Identificación</mat-label>
+        <input disabled matInput [(ngModel)]="data.identification">
+    </mat-form-field>
+    <div fxLayout="row">
+        <mat-form-field style="width: 49%;" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input disabled matInput [(ngModel)]="data.name">
+        </mat-form-field>
+        <mat-form-field style="width: 49%; margin-left: 10px;" appearance="outline">
+            <mat-label>Apellido</mat-label>
+            <input disabled matInput [(ngModel)]="data.lastname">
+        </mat-form-field>
+    </div>
+    <mat-form-field style="width: 49%" appearance="outline">
+        <mat-label>Fecha de Nacimiento</mat-label>
+        <input disabled matInput [(ngModel)]="data.birthdate">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button mat-raised-button (click)="closeDialog()" color="primary">Cerrar</button>
+</div>

@@ -1,0 +1,60 @@
+<div *ngIf="showCarga">
+    <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar><br>
+</div>
+<div fxLayout="row">
+    <div fxFlex="50">
+        <h1 style="color: #2E2E2E;" mat-dialog-title>Actualizar Usuario</h1>
+    </div>
+    <div fxFlex="50" fxLayoutAlign="end start">
+        <button mat-button mat-icon-button aria-label="Clear"
+            style="color: #A4A4A4; margin-top: -15px;margin-right: -15px;" (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div mat-dialog-content style="border-top-width: 1.5px;border-top-color: #E6E6E6; border-top-style: solid;">
+    <br>
+    <mat-form-field style="width: 49%;" appearance="outline">
+        <mat-label>Identificación</mat-label>
+        <input matInput [(ngModel)]="user.identification" placeholder="Ingrese su número de Identificación" required>
+        <button mat-button *ngIf="user.identification" matSuffix mat-icon-button aria-label="Clear"
+            style="color: #424242;" (click)="user.identification=''">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <div fxLayout="row">
+        <mat-form-field style="width: 49%;" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput [(ngModel)]="user.name" placeholder="Ingrese su Nombre" required>
+            <button mat-button *ngIf="user.name" matSuffix mat-icon-button aria-label="Clear" style="color: #424242;"
+                (click)="user.name=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field style="width: 49%; margin-left: 10px;" appearance="outline">
+            <mat-label>Apellido</mat-label>
+            <input matInput [(ngModel)]="user.lastname" placeholder="Ingrese su Apellido" required>
+            <button mat-button *ngIf="user.lastname" matSuffix mat-icon-button aria-label="Clear"
+                style="color: #424242;" (click)="user.lastname=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+    </div>
+    <mat-form-field style="width: 49%" appearance="outline">
+        <mat-label>Fecha de Nacimiento</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="date" readonly required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions fxLayout="row">
+    <div fxFlex="50">
+        <h4 *ngIf="showMessage" style="color: red;">{{message}}</h4>
+    </div>
+    <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button (click)="closeDialog()" color="warn">Cancelar</button>
+        <button mat-raised-button cdkFocusInitial (click)="updateUser()" color="primary">Actualizar</button>
+    </div>
+</div>

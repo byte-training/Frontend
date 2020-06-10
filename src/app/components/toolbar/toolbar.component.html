@@ -1,0 +1,21 @@
+<div fxLayout="column" style="height: 100%;">
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <button mat-button routerLink="">
+                <span class="logo">Byte Training</span>
+                <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">home
+                </mat-icon>
+            </button>
+            <!-- <span class="example-spacer"></span> -->
+            <button mat-button routerLink="/users">{{ 'principal.texto' | translate }}</button>
+            <span class="example-spacer"></span>
+            <button mat-button [ngClass]="{'active': activeLang == 'en'}" (click)="cambiarLenguaje('en')">Ingles</button>
+            <span>|</span>
+            <button mat-button [ngClass]="{'active': activeLang == 'es'}" (click)="cambiarLenguaje('es')">Español</button>
+        </mat-toolbar-row>
+
+    </mat-toolbar>
+    <div fxFlex="100">
+        <router-outlet></router-outlet>
+    </div>
+</div>
