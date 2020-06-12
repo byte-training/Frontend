@@ -18,5 +18,5 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
     <button mat-raised-button (click)="closeDialog()" color="warn">Cancelar</button>
-    <button mat-raised-button cdkFocusInitial (click)="deleteUser()" color="primary">Eliminar</button>
+    <button mat-raised-button cdkFocusInitial mat-dialog-close="eliminado" (click)="deleteUser()" color="primary" >Eliminar</button>
 </div>

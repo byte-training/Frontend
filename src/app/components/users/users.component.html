@@ -78,7 +78,7 @@
 <!-- RESPONSIVE -->
 <div class="animated fadeIn" style="background-color: white; margin: auto; height: 100%;" *ngIf="deviceXs">
 
-    <div *ngIf="!addUserResponsive" class="animated fadeIn">
+    <div *ngIf="!addUserResponsive && !readUserResponsive" class="animated fadeIn">
         <div style="padding: 2%;">
             <mat-form-field appearance="outline" style="height: 0px;">
                 <mat-label>{{'principal.buscador' | translate}}</mat-label>
@@ -95,23 +95,47 @@
             </div>
         </div>
         <mat-divider></mat-divider>
-        <mat-list [ngStyle]="{'height.px': scrHeight-scrHeight/3, 'overflow': 'auto'}">
+        <!-- <mat-list [ngStyle]="{'height.px': scrHeight-scrHeight/3, 'overflow': 'auto'}">
             <mat-list-item *ngFor="let user of dataSource.filteredData">
-                <mat-icon mat-list-icon style="color: #BDBDBD;">code</mat-icon>
-                <div mat-line>{{user.name}} {{user.lastname}}</div>
-                <div mat-line style="color: #6E6E6E;"> {{user.identification}} </div>
+                <button mat-button aria-label="Clear" style="width: 100%; background-color: tomato;">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <mat-icon mat-list-icon style="color: #BDBDBD; margin-left: -5px;margin-right: 5px;">code
+                        </mat-icon>
+                        <div fxLayout="column" fxLayoutAlign="center start">
+                            <div mat-line>{{user.name}} {{user.lastname}}</div>
+                            <div mat-line style="color: #6E6E6E;margin-top: -15px;"> {{user.identification}} </div>
+                        </div>
+                    </div>
+                </button>
             </mat-list-item>
-        </mat-list>
+        </mat-list> -->
+        <div [ngStyle]="{'height.px': scrHeight-scrHeight/3, 'overflow': 'auto'}">
+            <div *ngFor="let user of dataSource.filteredData">
+                <button mat-button aria-label="Clear" style="width: 100%; padding-top: 3px;padding-bottom: 3px;"
+                    (click)="changeView2(user)">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <mat-icon style="color: #BDBDBD; margin-right: 15px;">code</mat-icon>
+                        <div fxLayout="column" fxLayoutAlign="center start">
+                            <label style="color: #585858;">{{user.name}} {{user.lastname}}</label>
+                            <div style="color: #848484;margin-top: -15px;"> {{user.identification}} </div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div *ngIf="showCarga && addUserResponsive">
         <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar><br>
     </div>
-    <div *ngIf="addUserResponsive" fxLayout="column" fxLayoutAlign="center center" style="padding: 5%;" class="animated fadeIn">
+
+    <!-- CREATE USER RESPONSIVE -->
+    <div *ngIf="addUserResponsive" fxLayout="column" fxLayoutAlign="center center" style="padding: 5%;"
+        class="animated fadeIn">
         <div fxLayout="row">
             <button mat-button mat-icon-button aria-label="Clear"
                 style="color: #848484; position: absolute; left: 10px;top: 110px; transform: scale(1.5);"
-                (click)="changeView1()">
+                (click)="changeViewsClean()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
             </button>
             <h1 style="color: #848484;">Crear Usuario</h1>
@@ -153,4 +177,74 @@
         <br>
         <h4 *ngIf="showMessage" style="color: red;">{{message}}</h4>
     </div>
+
+    <!-- READ USER RESPONSIVE -->
+    <div *ngIf="readUserResponsive" fxLayout="column" fxLayoutAlign="center center" style="padding: 5%;"
+        class="animated fadeIn">
+        <div fxLayout="row">
+            <button mat-button mat-icon-button aria-label="Clear"
+                style="color: #848484; position: absolute; left: 10px;top: 110px; transform: scale(1.5);"
+                (click)="changeViewsClean()">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <h1 style="color: #848484;">Datos del Usuario</h1>
+        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>Identificación</mat-label>
+            <input matInput [(ngModel)]="user.identification" placeholder="Ingrese su número de Identificación" required
+                [disabled]="!editData">
+            <button mat-button *ngIf="user.identification && editData" matSuffix mat-icon-button aria-label="Clear"
+                style="color: #424242;" (click)="user.identification=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput [(ngModel)]="user.name" placeholder="Ingrese su Nombre" required [disabled]="!editData">
+            <button mat-button *ngIf="user.name && editData" matSuffix mat-icon-button aria-label="Clear"
+                style="color: #424242;" (click)="user.name=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Apellido</mat-label>
+
+            <input matInput [(ngModel)]="user.lastname" placeholder="Ingrese su Apellido" required
+                [disabled]="!editData">
+            <button mat-button *ngIf="user.lastname && editData" matSuffix mat-icon-button aria-label="Clear"
+                style="color: #424242;" (click)="user.lastname=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="date" readonly required [disabled]="!editData">
+            <mat-datepicker-toggle *ngIf="editData" matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <br>
+        <div fxLayout="row" style="width: 100%;" *ngIf="!editData">
+            <div fxFlex="50" fxLayoutAlign="center center">
+                <button mat-raised-button cdkFocusInitial (click)="changeEdit()" color="primary"
+                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>create</mat-icon> Editar</button>
+            </div>
+            <div fxFlex="50" fxLayoutAlign="center center">
+                <button mat-raised-button cdkFocusInitial (click)="deleteDialog(user)" color="warn"
+                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>delete</mat-icon> Eliminar</button>
+            </div>
+        </div>
+        <div fxLayout="row" style="width: 100%;" *ngIf="editData">
+            <div fxFlex="50" fxLayoutAlign="center center">
+                <button mat-raised-button cdkFocusInitial (click)="updateUser()" color="primary"
+                    [ngStyle]="{'width.px': scrWidth/2.5}">Actualizar</button>
+            </div>
+            <div fxFlex="50" fxLayoutAlign="center center">
+                <button mat-raised-button cdkFocusInitial (click)="changeEdit()" color="warn"
+                    [ngStyle]="{'width.px': scrWidth/2.5}">Cancelar</button>
+            </div>
+        </div>
+        <br>
+        <h4 *ngIf="showMessage" style="color: red;">{{message}}</h4>
+    </div>
+
 </div>

@@ -28,10 +28,16 @@ var ids = 0;
 var isLoadingResults = false;
 var datos: User[];
 
+var eliminadoResponsive : boolean = false;
+
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  styleUrls: ['./users.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS }
+  ]
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
@@ -47,6 +53,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   isLoadingResults = isLoadingResults;
 
   addUserResponsive: boolean = false;
+  readUserResponsive: boolean = false;
 
   //responsive
   user: User;
@@ -56,10 +63,16 @@ export class UsersComponent implements OnInit, OnDestroy {
   showMessage = false;
   message = "";
 
+  fechaArray: any;
+  fecha: any;
+  date: any;
+
+  editData : boolean = false;
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -75,8 +88,32 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   //addResponsive
   changeView1() {
+    this.user = new User(0, "", "", "", "");
     this.addUserResponsive = !this.addUserResponsive;
     this.showMessage = false;
+  }
+
+  changeView2(user) {
+    this.readUserResponsive = !this.readUserResponsive;
+    this.showMessage = false;
+    this.fechaArray = user.birthdate.split('/');
+    this.fecha = this.fechaArray[2] + '-' + this.fechaArray[1] + '-' + this.fechaArray[0];
+    console.log(user)
+    this.date = new Date(this.fecha);
+    this.date.setHours(this.date.getHours() + 6);
+    this.user = new User(user.id, user.identification, user.name, user.lastname, user.birthdate)
+  }
+
+  changeViewsClean() {
+    this.addUserResponsive = false;
+    this.readUserResponsive = false;
+    this.editData = false;
+    this.showMessage = false;
+    this.user = new User(0, "", "", "", "");
+  }
+
+  changeEdit(){
+    this.editData = !this.editData;
   }
 
   //Height and Width
@@ -114,7 +151,9 @@ export class UsersComponent implements OnInit, OnDestroy {
       console.log(result.mqAlias);
       this.deviceXs = result.mqAlias === 'xs' ? true : false;
       this.addUserResponsive = result.mqAlias === 'xs' ? false : false;
-      if(!this.deviceXs){
+      this.readUserResponsive = result.mqAlias === 'xs' ? false : false;
+      this.editData = result.mqAlias === 'xs' ? false : false;
+      if (!this.deviceXs) {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
@@ -204,6 +243,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(async result => {
       console.log('The dialog was closed');
       console.log(result, 'Resultado de ingreso');
+      if(eliminadoResponsive || result == 'eliminado'){
+        this.changeViewsClean()
+        eliminadoResponsive = false;
+      }
 
       this.getUsers();
 
@@ -276,6 +319,69 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     }
 
+  }
+
+  //------------------ UPDATE RESPOSIVE
+  async updateUser() {
+    if (this.user.identification == '' || this.user.identification == null || this.user.name == '' || this.user.name == null ||
+      this.user.lastname == '' || this.user.lastname == null || this.date == null) {
+      this.message = "Ingrese todos los campos.";
+      this.showMessage = true;
+    } else {
+      let dataEncontrada = datos.filter(item => item.identification == this.user.identification && item.id != this.user.id);
+
+      if (dataEncontrada.length > 0) {
+        this.message = "La identificación ya existe.";
+        this.showMessage = true;
+
+      } else {
+
+        this.user.birthdate = convert(this.date);
+        console.log(this.user, 'Esto Actualizo')
+
+        this.showCarga = true;
+
+        this._userService.updateUser(this.user).subscribe(
+          response => {
+            this.showCarga = false;
+
+            console.log(response, 'RESPONSE')
+            if (response) {
+              this.status = 'ok';
+              if (response.response == 'Updated') {
+                this.changeViewsClean();
+                this.getUsers();
+                this.user = new User(0, "", "", "", "");
+                isLoadingResults = true;
+
+                this.snackBar.open(response.message, "", {
+                  panelClass: ['colorBueno'],
+                  duration: 2100, horizontalPosition: 'end',
+                });
+              } else {
+                this.snackBar.open(response.message, "", {
+                  panelClass: ['colorError'],
+                  duration: 3100, horizontalPosition: 'end'
+                });
+              }
+            }
+          },
+          error => {
+            this.showCarga = false;
+
+            if (error) {
+              console.log(<any>error);
+              this.status = 'error';
+              this.snackBar.open("Error al actualizar al usuario!", "", {
+                panelClass: ['colorError'],
+                duration: 3100, horizontalPosition: 'end'
+              });
+            }
+          }
+        )
+      }
+
+    }
   }
 
 
@@ -522,8 +628,9 @@ export class deleteDialog {
         if (response) {
           this.status = 'ok';
           if (response.response == 'Deleted') {
-            this.dialogRef.close();
+            eliminadoResponsive = true;
             isLoadingResults = true;
+            this.dialogRef.close();
 
             this.snackBar.open(response.message, "", {
               panelClass: ['colorBueno'],
