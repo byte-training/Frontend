@@ -17,7 +17,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
   declarations: [
     AppComponent,
     ToolbarComponent,
-    TranslationComponent
+    TranslationComponent,
   ],
   imports: [
     BrowserModule,

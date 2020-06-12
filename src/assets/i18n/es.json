@@ -4,5 +4,8 @@
     "principal.headerTable2" : "Nombre",
     "principal.headerTable3" : "Apellido",
     "principal.headerTable4" : "Fecha de Nacimiento",
-    "principal.headerTable5" : "Acciones"
+    "principal.headerTable5" : "Acciones",
+    "principal.title" : "Listado de usuarios",
+    "principal.buscador" : "Buscar",
+    "principal.btn1" : "Agregar"
 }

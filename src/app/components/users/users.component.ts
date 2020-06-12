@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, Input, HostListener } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,9 +10,9 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { AppDateAdapter, APP_DATE_FORMATS } from 'src/app/format-datepicker';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { empty, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { ToolbarComponent } from '../toolbar/toolbar.component';
+import { MediaObserver, MediaChange } from '@angular/flex-layout';
 
 
 export interface UserData {
@@ -26,35 +26,75 @@ export interface UserData {
 var usuario: User;
 var ids = 0;
 var isLoadingResults = false;
-var datos : User[];
+var datos: User[];
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
-  public activeLang = 'en';
-
+  public activeLang = 'es';
+  public deviceXs: boolean;
+  public mediaSub: Subscription;
   displayedColumns: string[] = ['id', 'name', 'lastname', 'birthdate', 'actions'];
   dataSource: MatTableDataSource<UserData>;
+  // Declare height and width variables
+  scrHeight: any;
+  scrWidth: any;
+  users: any[];
+  isLoadingResults = isLoadingResults;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  addUserResponsive: boolean = false;
 
-  constructor(private activatedRoute: ActivatedRoute, public dialog: MatDialog, private _userService: UsersService, private translate: TranslateService) {
+  //responsive
+  user: User;
+  userSave: User;
+  public status;
+  showCarga = false;
+  showMessage = false;
+  message = "";
+
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
+    private _userService: UsersService,
+    private translate: TranslateService,
+    public mediaObserver: MediaObserver,
+    private snackBar: MatSnackBar) {
+
     this.translate.setDefaultLang(this.activeLang);
+    this.getScreenSize();
+    this.user = new User(0, "", "", "", "");
   }
+
+  //addResponsive
+  changeView1() {
+    this.addUserResponsive = !this.addUserResponsive;
+    this.showMessage = false;
+  }
+
+  //Height and Width
+  @HostListener('window:resize', ['$event'])
+
+  getScreenSize(event?) {
+    this.scrHeight = window.innerHeight;
+    this.scrWidth = window.innerWidth;
+    console.log(this.scrHeight, this.scrWidth);
+  }
+
+  //Multilingue
   public cambiarLenguaje(lang) {
     this.activeLang = lang;
     this.translate.use(lang);
   }
-  users: any[];
-  isLoadingResults = isLoadingResults;
 
-  ngOnInit(): void {
-
+  async  ngOnInit() {
     this.activatedRoute.url
       .subscribe(url => console.log('The URL changed to: ' + url));
 
@@ -65,8 +105,25 @@ export class UsersComponent implements OnInit {
       datos = this.users;
     });
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }, 100);
+
+    this.mediaSub = await this.mediaObserver.media$.subscribe((result: MediaChange) => {
+      console.log(result.mqAlias);
+      this.deviceXs = result.mqAlias === 'xs' ? true : false;
+      this.addUserResponsive = result.mqAlias === 'xs' ? false : false;
+      if(!this.deviceXs){
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
+    })
+
+  }
+
+  ngOnDestroy() {
+    this.mediaSub.unsubscribe();
   }
 
   applyFilter(event: Event) {
@@ -78,7 +135,8 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  //Get Dialog
+
+  //Get Data
   getUsers() {
     this._userService.getUsers().pipe(
       catchError((error) => {
@@ -152,9 +210,83 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  //RESPONSIVE
+  createUser() {
+    console.log(this.user, 'esto agrega')
+    if (this.user.identification == '' || this.user.identification == null || this.user.name == '' || this.user.name == null ||
+      this.user.lastname == '' || this.user.lastname == null || this.user.birthdate == '' || this.user.birthdate == null) {
+      this.message = "Ingrese todos los campos.";
+      this.showMessage = true;
+    } else {
+      let dataEncontrada = datos.filter(item => item.identification == this.user.identification);
+
+      if (dataEncontrada.length > 0) {
+        this.message = "La identificación ya existe.";
+        this.showMessage = true;
+
+      } else {
+        ids += 1;
+        this.showMessage = false;
+        this.userSave = new User(ids, this.user.identification, this.user.name, this.user.lastname, convert(this.user.birthdate));
+
+        console.log(this.userSave, 'Todo')
+
+        this.showCarga = true;
+
+        this._userService.createUser(this.userSave).subscribe(
+          response => {
+            this.showCarga = false;
+
+            console.log(response, 'RESPONSE')
+            if (response) {
+              this.status = 'ok';
+              if (response.response == 'Created') {
+                this.changeView1();
+                this.getUsers();
+                this.user = new User(0, "", "", "", "");
+                isLoadingResults = true;
+
+                this.snackBar.open(response.message, "", {
+                  panelClass: ['colorBueno'],
+                  duration: 2100, horizontalPosition: 'end',
+                });
+              } else {
+                this.snackBar.open(response.message, "", {
+                  panelClass: ['colorError'],
+                  duration: 3100, horizontalPosition: 'end'
+                });
+              }
+            }
+          },
+          error => {
+            this.showCarga = false;
+
+            if (error) {
+              console.log(<any>error);
+              this.status = 'error';
+              this.snackBar.open("Error al crear al usuario!", "", {
+                panelClass: ['colorError'],
+                duration: 3100, horizontalPosition: 'end'
+              });
+            }
+          }
+        )
+      }
+
+
+    }
+
+  }
+
+
+
 }
 
 
+
+
+
+//CLASES PARA LOS DIALOGS CRUD
 @Component({
   selector: 'create-user',
   templateUrl: 'create-user.html',

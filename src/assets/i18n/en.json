@@ -4,6 +4,9 @@
     "principal.headerTable2" : "Name",
     "principal.headerTable3" : "Lastname",
     "principal.headerTable4" : "Birthdate",
-    "principal.headerTable5" : "Actions"
+    "principal.headerTable5" : "Actions",
+    "principal.title" : "List of users",
+    "principal.buscador" : "Search",
+    "principal.btn1" : "Add"
 
 }

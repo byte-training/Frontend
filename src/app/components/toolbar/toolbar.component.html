@@ -6,12 +6,25 @@
                 <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">home
                 </mat-icon>
             </button>
-            <!-- <span class="example-spacer"></span> -->
+            <button *ngIf="!deviceXs" mat-button routerLink="/users">{{ 'principal.texto' | translate }}</button>
+            <span class="example-spacer"></span>
+            <div *ngIf="!deviceXs">
+                <button mat-button [ngClass]="{'active': activeLang == 'en'}"
+                    (click)="cambiarLenguaje('en')">Ingles</button>
+                <span>|</span>
+                <button mat-button [ngClass]="{'active': activeLang == 'es'}"
+                    (click)="cambiarLenguaje('es')">Español</button>
+            </div>
+        </mat-toolbar-row>
+        <mat-toolbar-row *ngIf="deviceXs">
             <button mat-button routerLink="/users">{{ 'principal.texto' | translate }}</button>
             <span class="example-spacer"></span>
-            <button mat-button [ngClass]="{'active': activeLang == 'en'}" (click)="cambiarLenguaje('en')">Ingles</button>
+
+            <button mat-button [ngClass]="{'active': activeLang == 'en'}"
+                (click)="cambiarLenguaje('en')">Ingles</button>
             <span>|</span>
-            <button mat-button [ngClass]="{'active': activeLang == 'es'}" (click)="cambiarLenguaje('es')">Español</button>
+            <button mat-button [ngClass]="{'active': activeLang == 'es'}"
+                (click)="cambiarLenguaje('es')">Español</button>
         </mat-toolbar-row>
 
     </mat-toolbar>

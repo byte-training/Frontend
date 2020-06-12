@@ -8,6 +8,7 @@ import { MaterialModule } from 'src/app/material';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { DataListPipe } from 'src/app/pipes/data-list.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { HttpClient } from '@angular/common/http';
     createDialog,
     readDialog,
     updateDialog,
-    deleteDialog
+    deleteDialog,
+    DataListPipe
   ],
   imports: [
     CommonModule,
