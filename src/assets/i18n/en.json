@@ -7,6 +7,22 @@
     "principal.headerTable5" : "Actions",
     "principal.title" : "List of users",
     "principal.buscador" : "Search",
-    "principal.btn1" : "Add"
+    "principal.btn1" : "Add",
+    "principal.dialog1Title" : "Create User",
+    "principal.dialog2Title" : "User Data",
+    "principal.dialog3Title" : "Update User",
+    "principal.dialog4Title" : "Delete User",
+    "principal.dialog4Description" : "Are you sure you want to delete the record?",
+    "principal.placeholder1" : "Enter your ID number",
+    "principal.placeholder2" : "Enter your Name",
+    "principal.placeholder3" : "Enter your Last Name",
+    "principal.placeholder4" : "Enter any data",
+    "principal.btnCancel" : "Cancel",
+    "principal.btnCrear" : "Create",
+    "principal.btnCerrar" : "Close",
+    "principal.btnActualizar" : "To update",
+    "principal.btnEliminar" : "Remove",
+    "principal.footerTable" : "Items per page:"
+
 
 }

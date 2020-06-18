@@ -12,7 +12,7 @@
 
     <mat-form-field appearance="outline">
         <mat-label>{{'principal.buscador' | translate}}</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese nombre">
+        <input matInput (keyup)="applyFilter($event)" placeholder="{{'principal.placeholder4' | translate}}">
     </mat-form-field>
 
     <div class="example-loading-shade" *ngIf="isLoadingResults">
@@ -82,7 +82,7 @@
         <div style="padding: 2%;">
             <mat-form-field appearance="outline" style="height: 0px;">
                 <mat-label>{{'principal.buscador' | translate}}</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese nombre">
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{'principal.placeholder4' | translate}}">
             </mat-form-field>
         </div>
         <div fxLayout="row" style="padding: 2%;margin-top: 5px;">
@@ -95,20 +95,6 @@
             </div>
         </div>
         <mat-divider></mat-divider>
-        <!-- <mat-list [ngStyle]="{'height.px': scrHeight-scrHeight/3, 'overflow': 'auto'}">
-            <mat-list-item *ngFor="let user of dataSource.filteredData">
-                <button mat-button aria-label="Clear" style="width: 100%; background-color: tomato;">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                        <mat-icon mat-list-icon style="color: #BDBDBD; margin-left: -5px;margin-right: 5px;">code
-                        </mat-icon>
-                        <div fxLayout="column" fxLayoutAlign="center start">
-                            <div mat-line>{{user.name}} {{user.lastname}}</div>
-                            <div mat-line style="color: #6E6E6E;margin-top: -15px;"> {{user.identification}} </div>
-                        </div>
-                    </div>
-                </button>
-            </mat-list-item>
-        </mat-list> -->
         <div [ngStyle]="{'height.px': scrHeight-scrHeight/3, 'overflow': 'auto'}">
             <div *ngFor="let user of dataSource.filteredData">
                 <button mat-button aria-label="Clear" style="width: 100%; padding-top: 3px;padding-bottom: 3px;"
@@ -138,11 +124,11 @@
                 (click)="changeViewsClean()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
             </button>
-            <h1 style="color: #848484;">Crear Usuario</h1>
+            <h1 style="color: #848484;">{{'principal.dialog1Title' | translate}}</h1>
         </div>
         <mat-form-field appearance="outline">
-            <mat-label>Identificación</mat-label>
-            <input matInput [(ngModel)]="user.identification" placeholder="Ingrese su número de Identificación"
+            <mat-label>{{'principal.headerTable1' | translate}}</mat-label>
+            <input matInput [(ngModel)]="user.identification" placeholder="{{'principal.placeholder1' | translate}}"
                 required>
             <button mat-button *ngIf="user.identification" matSuffix mat-icon-button aria-label="Clear"
                 style="color: #424242;" (click)="user.identification=''">
@@ -150,30 +136,30 @@
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input matInput [(ngModel)]="user.name" placeholder="Ingrese su Nombre" required>
+            <mat-label>{{'principal.headerTable2' | translate}}</mat-label>
+            <input matInput [(ngModel)]="user.name" placeholder="{{'principal.placeholder2' | translate}}" required>
             <button mat-button *ngIf="user.name" matSuffix mat-icon-button aria-label="Clear" style="color: #424242;"
                 (click)="user.name=''">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Apellido</mat-label>
-            <input matInput [(ngModel)]="user.lastname" placeholder="Ingrese su Apellido" required>
+            <mat-label>{{'principal.headerTable3' | translate}}</mat-label>
+            <input matInput [(ngModel)]="user.lastname" placeholder="{{'principal.placeholder3' | translate}}" required>
             <button mat-button *ngIf="user.lastname" matSuffix mat-icon-button aria-label="Clear"
                 style="color: #424242;" (click)="user.lastname=''">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Fecha de Nacimiento</mat-label>
+            <mat-label>{{'principal.headerTable4' | translate}}</mat-label>
             <input matInput [matDatepicker]="picker" [(ngModel)]="user.birthdate" readonly required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <br>
         <button mat-raised-button cdkFocusInitial (click)="createUser()" color="primary"
-            [ngStyle]="{'width.px': scrWidth/2}">Crear</button>
+            [ngStyle]="{'width.px': scrWidth/2}">{{'principal.btnCrear' | translate}}</button>
         <br>
         <h4 *ngIf="showMessage" style="color: red;">{{message}}</h4>
     </div>
@@ -187,11 +173,11 @@
                 (click)="changeViewsClean()">
                 <mat-icon>keyboard_arrow_left</mat-icon>
             </button>
-            <h1 style="color: #848484;">Datos del Usuario</h1>
+            <h1 style="color: #848484;">{{'principal.dialog2Title' | translate}}</h1>
         </div>
         <mat-form-field appearance="outline">
-            <mat-label>Identificación</mat-label>
-            <input matInput [(ngModel)]="user.identification" placeholder="Ingrese su número de Identificación" required
+            <mat-label>{{'principal.headerTable1' | translate}}</mat-label>
+            <input matInput [(ngModel)]="user.identification" placeholder="{{'principal.placeholder1' | translate}}" required
                 [disabled]="!editData">
             <button mat-button *ngIf="user.identification && editData" matSuffix mat-icon-button aria-label="Clear"
                 style="color: #424242;" (click)="user.identification=''">
@@ -199,17 +185,17 @@
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input matInput [(ngModel)]="user.name" placeholder="Ingrese su Nombre" required [disabled]="!editData">
+            <mat-label>{{'principal.headerTable2' | translate}}</mat-label>
+            <input matInput [(ngModel)]="user.name" placeholder="{{'principal.placeholder2' | translate}}" required [disabled]="!editData">
             <button mat-button *ngIf="user.name && editData" matSuffix mat-icon-button aria-label="Clear"
                 style="color: #424242;" (click)="user.name=''">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Apellido</mat-label>
+            <mat-label>{{'principal.headerTable3' | translate}}</mat-label>
 
-            <input matInput [(ngModel)]="user.lastname" placeholder="Ingrese su Apellido" required
+            <input matInput [(ngModel)]="user.lastname" placeholder="{{'principal.placeholder3' | translate}}" required
                 [disabled]="!editData">
             <button mat-button *ngIf="user.lastname && editData" matSuffix mat-icon-button aria-label="Clear"
                 style="color: #424242;" (click)="user.lastname=''">
@@ -217,7 +203,7 @@
             </button>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Fecha de Nacimiento</mat-label>
+            <mat-label>{{'principal.headerTable4' | translate}}</mat-label>
             <input matInput [matDatepicker]="picker" [(ngModel)]="date" readonly required [disabled]="!editData">
             <mat-datepicker-toggle *ngIf="editData" matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -226,21 +212,21 @@
         <div fxLayout="row" style="width: 100%;" *ngIf="!editData">
             <div fxFlex="50" fxLayoutAlign="center center">
                 <button mat-raised-button cdkFocusInitial (click)="changeEdit()" color="primary"
-                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>create</mat-icon> Editar</button>
+                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>create</mat-icon> {{'principal.btnActualizar' | translate}}</button>
             </div>
             <div fxFlex="50" fxLayoutAlign="center center">
                 <button mat-raised-button cdkFocusInitial (click)="deleteDialog(user)" color="warn"
-                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>delete</mat-icon> Eliminar</button>
+                    [ngStyle]="{'width.px': scrWidth/2.5}"><mat-icon>delete</mat-icon> {{'principal.btnEliminar' | translate}}</button>
             </div>
         </div>
         <div fxLayout="row" style="width: 100%;" *ngIf="editData">
             <div fxFlex="50" fxLayoutAlign="center center">
                 <button mat-raised-button cdkFocusInitial (click)="updateUser()" color="primary"
-                    [ngStyle]="{'width.px': scrWidth/2.5}">Actualizar</button>
+                    [ngStyle]="{'width.px': scrWidth/2.5}">{{'principal.btnActualizar' | translate}}</button>
             </div>
             <div fxFlex="50" fxLayoutAlign="center center">
                 <button mat-raised-button cdkFocusInitial (click)="changeEdit()" color="warn"
-                    [ngStyle]="{'width.px': scrWidth/2.5}">Cancelar</button>
+                    [ngStyle]="{'width.px': scrWidth/2.5}">{{'principal.btnCancel' | translate}}</button>
             </div>
         </div>
         <br>

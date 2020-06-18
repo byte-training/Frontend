@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,15 +12,18 @@ import { Subscription } from 'rxjs';
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
-  public activeLang = 'es';
+  public static activeLang = 'es';
   mediaSub: Subscription;
   deviceXs: boolean;
 
   constructor(
     private translate: TranslateService,
-    public mediaObserver: MediaObserver
+    public mediaObserver: MediaObserver,
+    private router: Router,
+    private location: Location,
   ) {
-    this.translate.setDefaultLang(this.activeLang);
+    this.translate.setDefaultLang(ToolbarComponent.activeLang);
+    this.location = location;
   }
   ngOnInit() {
     this.mediaSub = this.mediaObserver.media$.subscribe((result: MediaChange) => {
@@ -33,8 +38,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   public cambiarLenguaje(lang) {
-    this.activeLang = lang;
+    ToolbarComponent.activeLang = lang;
     this.translate.use(lang);
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.location.path()]);
+    });
   }
 
 }

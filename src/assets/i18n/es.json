@@ -7,5 +7,20 @@
     "principal.headerTable5" : "Acciones",
     "principal.title" : "Listado de usuarios",
     "principal.buscador" : "Buscar",
-    "principal.btn1" : "Agregar"
+    "principal.btn1" : "Agregar",
+    "principal.dialog1Title" : "Crear Usuario",
+    "principal.dialog2Title" : "Datos del Usuario",
+    "principal.dialog3Title" : "Actualizar Usuario",
+    "principal.dialog4Title" : "Eliminar Usuario",
+    "principal.dialog4Description" : "¿Esta seguro que desea eliminar el registro?",
+    "principal.placeholder1" : "Ingrese su número de Identificación",
+    "principal.placeholder2" : "Ingrese su Nombre",
+    "principal.placeholder3" : "Ingrese su Apellido",
+    "principal.placeholder4" : "Ingrese cualquier dato",
+    "principal.btnCancel" : "Cancelar",
+    "principal.btnCrear" : "Crear",
+    "principal.btnCerrar" : "Cerrar",
+    "principal.btnActualizar" : "Actualizar",
+    "principal.btnEliminar" : "Eliminar",
+    "principal.footerTable" : "Artículos por página:"
 }

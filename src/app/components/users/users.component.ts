@@ -13,6 +13,7 @@ import { catchError } from 'rxjs/operators';
 import { empty, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { ToolbarComponent } from '../toolbar/toolbar.component';
 
 
 export interface UserData {
@@ -28,7 +29,8 @@ var ids = 0;
 var isLoadingResults = false;
 var datos: User[];
 
-var eliminadoResponsive : boolean = false;
+var eliminadoResponsive: boolean = false;
+
 
 @Component({
   selector: 'app-users',
@@ -41,7 +43,8 @@ var eliminadoResponsive : boolean = false;
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
-  public activeLang = 'es';
+  public activeLang = ToolbarComponent.activeLang;
+
   public deviceXs: boolean;
   public mediaSub: Subscription;
   displayedColumns: string[] = ['id', 'name', 'lastname', 'birthdate', 'actions'];
@@ -67,7 +70,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   fecha: any;
   date: any;
 
-  editData : boolean = false;
+  editData: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -112,7 +115,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.user = new User(0, "", "", "", "");
   }
 
-  changeEdit(){
+  changeEdit() {
     this.editData = !this.editData;
   }
 
@@ -125,13 +128,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     console.log(this.scrHeight, this.scrWidth);
   }
 
-  //Multilingue
-  public cambiarLenguaje(lang) {
-    this.activeLang = lang;
-    this.translate.use(lang);
-  }
-
-  async  ngOnInit() {
+  async ngOnInit() {
     this.activatedRoute.url
       .subscribe(url => console.log('The URL changed to: ' + url));
 
@@ -243,7 +240,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(async result => {
       console.log('The dialog was closed');
       console.log(result, 'Resultado de ingreso');
-      if(eliminadoResponsive || result == 'eliminado'){
+      if (eliminadoResponsive || result == 'eliminado') {
         this.changeViewsClean()
         eliminadoResponsive = false;
       }
@@ -404,6 +401,8 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 export class createDialog {
 
+  public activeLang = ToolbarComponent.activeLang;
+
   showCarga = false;
   showMessage = false;
   message = "";
@@ -412,9 +411,10 @@ export class createDialog {
   public userSave: User;
   public status;
 
-  constructor(public dialogRef: MatDialogRef<createDialog>, private snackBar: MatSnackBar, private _userService: UsersService) {
+  constructor(public dialogRef: MatDialogRef<createDialog>, private snackBar: MatSnackBar, private _userService: UsersService, private translate: TranslateService) {
     this.user = new User(0, "", "", "", "");
     this.userSave = new User(0, "", "", "", "");
+    this.translate.setDefaultLang(this.activeLang);
   }
 
   closeDialog(): void {
@@ -494,9 +494,13 @@ export class createDialog {
 })
 export class readDialog {
 
+  public activeLang = ToolbarComponent.activeLang;
+
   constructor(
     public dialogRef: MatDialogRef<readDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: User) { }
+    @Inject(MAT_DIALOG_DATA) public data: User, private translate: TranslateService) {
+    this.translate.setDefaultLang(this.activeLang);
+  }
 
   closeDialog(): void {
     this.dialogRef.close();
@@ -515,6 +519,8 @@ export class readDialog {
 
 export class updateDialog {
 
+  public activeLang = ToolbarComponent.activeLang;
+
   showCarga = false;
   showMessage = false;
   message = "";
@@ -527,11 +533,11 @@ export class updateDialog {
 
 
   constructor(
-    public dialogRef: MatDialogRef<updateDialog>, private snackBar: MatSnackBar, private _userService: UsersService) {
-    console.log(this.date)
-    this.date.setHours(this.date.getHours() + 6);
+    public dialogRef: MatDialogRef<updateDialog>, private snackBar: MatSnackBar, private _userService: UsersService, private translate: TranslateService) {
 
+    this.date.setHours(this.date.getHours() + 6);
     this.user = new User(usuario.id, usuario.identification, usuario.name, usuario.lastname, usuario.birthdate);
+    this.translate.setDefaultLang(this.activeLang);
   }
 
   closeDialog(): void {
@@ -605,12 +611,16 @@ export class updateDialog {
 })
 export class deleteDialog {
 
+  public activeLang = ToolbarComponent.activeLang;
+
   showCarga = false;
   public status;
 
   constructor(
     public dialogRef: MatDialogRef<deleteDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: UserData, private snackBar: MatSnackBar, private _userService: UsersService) { }
+    @Inject(MAT_DIALOG_DATA) public data: UserData, private snackBar: MatSnackBar, private _userService: UsersService, private translate: TranslateService) {
+    this.translate.setDefaultLang(this.activeLang);
+  }
 
   closeDialog(): void {
     this.dialogRef.close();
