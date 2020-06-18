@@ -153,6 +153,8 @@ export class UsersComponent implements OnInit, OnDestroy {
       if (!this.deviceXs) {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        // this.dataSource.paginator._intl.itemsPerPageLabel = this.activeLang == 'en' ? 'Items per page: ' : 'Artículos por página: ';
       }
     })
 

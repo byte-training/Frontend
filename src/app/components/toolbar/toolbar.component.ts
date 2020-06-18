@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 export class ToolbarComponent implements OnInit, OnDestroy {
 
   public static activeLang = 'es';
+  activeLang2 = ToolbarComponent.activeLang;
   mediaSub: Subscription;
   deviceXs: boolean;
 
@@ -39,6 +40,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   public cambiarLenguaje(lang) {
     ToolbarComponent.activeLang = lang;
+    this.activeLang2 = lang;
     this.translate.use(lang);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([this.location.path()]);
