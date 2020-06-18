@@ -1,4 +1,6 @@
 {
+    "principal.textEn" : "English",
+    "principal.textSp" : "Spanish",
     "principal.texto" : "Users",
     "principal.headerTable1" : "Identification",
     "principal.headerTable2" : "Name",
